@@ -1,0 +1,62 @@
+CONFIGURACIONES:
+
+
+SW1_30 (vtp server):
+
+enable
+configure terminal
+hostname SW1_30
+vtp domain grupo30
+vtp password redes2grupo30
+vtp version 2
+vtp mode server
+vlan 13
+name PRIMARIA
+vlan 23
+name BASICOS
+vlan 33
+name DIVERSIFICADO
+vlan 999
+name Parking_lot
+no ip domain-lookup
+
+
+enable secret usac
+line console 0
+password usac
+login
+line vty 0 15
+password usac
+login
+exit
+service password-encryption
+banner motd $ SOLO PERSONAL AUTORIZADO! $
+end
+copy running-config startup-config
+
+
+SW2-10_30 (vtp client):
+
+enable
+configure terminal
+hostname SW12_30
+vtp domain grupo30
+vtp password redes2grupo30
+vtp version 2
+vtp mode client
+no ip domain-lookup
+
+
+enable secret usac
+line console 0
+password usac
+login
+line vty 0 15
+password usac
+login
+exit
+service password-encryption
+banner motd $ SOLO PERSONAL AUTORIZADO! $
+end
+copy running-config startup-config
+
