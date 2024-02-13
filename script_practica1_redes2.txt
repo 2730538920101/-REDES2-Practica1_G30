@@ -66,10 +66,12 @@ configure terminal
 interface range Fa0/1-5
 switchport mode trunk
 switchport trunk allowed vlan 13,23,33
+no shutdown
 exit
 interface range Fa0/6-24, g0/1-2
 switchport mode access
 switchport access vlan 999
+shutdown
 end
 copy running-config startup-config
 
@@ -80,10 +82,35 @@ configure terminal
 interface range Fa0/1-2
 switchport mode trunk
 switchport trunk allowed vlan 13,23,33
+no shutdown
 exit
 interface range Fa0/5-24, g0/1-2
 switchport mode access
 switchport access vlan 999
+shutdown
 end
 copy running-config startup-config
 
+SWITCH 5 Y 12:
+interface range Fa0/3-4
+switchport mode access
+switchport acces vlan 13
+no shutdown
+end
+copy running-config startup-config
+
+SWITCH 6 y 11:
+interface Fa0/3
+switchport mode access
+switchport acces vlan 23
+no shutdown
+end
+copy running-config startup-config
+
+SWITCH 7 y 10:
+interface range Fa0/3-4
+switchport mode access
+switchport acces vlan 33
+no shutdown
+end
+copy running-config startup-config
