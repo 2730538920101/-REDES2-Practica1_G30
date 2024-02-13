@@ -60,3 +60,30 @@ banner motd $ SOLO PERSONAL AUTORIZADO! $
 end
 copy running-config startup-config
 
+Troncales primer y segundo nivel:
+
+configure terminal
+interface range Fa0/1-5
+switchport mode trunk
+switchport trunk allowed vlan 13,23,33
+exit
+interface range Fa0/6-24, g0/1-2
+switchport mode access
+switchport access vlan 999
+end
+copy running-config startup-config
+
+
+Troncales tercer nivel:
+
+configure terminal
+interface range Fa0/1-2
+switchport mode trunk
+switchport trunk allowed vlan 13,23,33
+exit
+interface range Fa0/5-24, g0/1-2
+switchport mode access
+switchport access vlan 999
+end
+copy running-config startup-config
+
