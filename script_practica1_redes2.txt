@@ -20,6 +20,8 @@ vlan 999
 name Parking_lot
 no ip domain-lookup
 
+spanning-tree mode rapid-pvst
+
 
 enable secret usac
 line console 0
@@ -64,8 +66,10 @@ Troncales primer y segundo nivel:
 
 configure terminal
 interface range Fa0/1-5
+switchport nonegotiate
 switchport mode trunk
 switchport trunk allowed vlan 13,23,33
+switchport trunk native vlan 1
 no shutdown
 exit
 interface range Fa0/6-24, g0/1-2
@@ -76,12 +80,14 @@ end
 copy running-config startup-config
 
 
-Troncales tercer nivel:
+Troncales tercer nivel (SW5, SW7, SW10, SW12):
 
 configure terminal
 interface range Fa0/1-2
+switchport nonegotiate
 switchport mode trunk
 switchport trunk allowed vlan 13,23,33
+switchport trunk native vlan 1
 no shutdown
 exit
 interface range Fa0/5-24, g0/1-2
@@ -91,26 +97,68 @@ shutdown
 end
 copy running-config startup-config
 
+Troncales tercer nivel (SW6, SW11):
+
+configure terminal
+interface range Fa0/1-2
+switchport nonegotiate
+switchport mode trunk
+switchport trunk allowed vlan 13,23,33
+switchport trunk native vlan 1
+no shutdown
+exit
+interface range Fa0/4-24, g0/1-2
+switchport mode access
+switchport access vlan 999
+shutdown
+end
+copy running-config startup-config
+
+
+Modo acceso tercer nivel:
+
 SWITCH 5 Y 12:
+configure terminal
 interface range Fa0/3-4
 switchport mode access
-switchport acces vlan 13
+switchport access vlan 13
 no shutdown
 end
 copy running-config startup-config
 
 SWITCH 6 y 11:
+configure terminal
 interface Fa0/3
+switchport port-security
+switchport port-security mac-address <dirección_MAC>
+switchport port-security maximum 1
+switchport port-security violation shutdown
 switchport mode access
-switchport acces vlan 23
+switchport access vlan 23
 no shutdown
 end
 copy running-config startup-config
 
 SWITCH 7 y 10:
+configure terminal
 interface range Fa0/3-4
 switchport mode access
-switchport acces vlan 33
+switchport access vlan 33
 no shutdown
 end
 copy running-config startup-config
+
+
+spanning-tree mode rapid-pvst
+
+IP
+192.168.13.2
+192.168.13.4
+192.168.23.2
+192.168.33.2
+192.168.33.3
+192.168.33.4
+192.168.33.5
+192.168.23.3
+192.168.13.5
+192.168.13.3
