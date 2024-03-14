@@ -1,4 +1,4 @@
-SW1
+------------- Config SW1 -------------
 
 vlan 63
 name CORPORATIVO
@@ -23,7 +23,8 @@ switchport mode access
 switchport access vlan 63
 no shutdown
 -------------------------------------------------------------
-MSW1
+
+---------- Config MSW1 ----------
 
 vlan 63
 name CORPORATIVO
@@ -34,6 +35,14 @@ exit
 vlan 23
 name DISTRIBUCION
 exit
+-------
+vlan 999
+name BLACKHOLE
+exit
+vlan 99
+name NATIVA
+exit
+-------
 
 interface range FastEthernet0/1 - 2
 switchport trunk encapsulation dot1q
@@ -56,3 +65,134 @@ no shutdown
 interface vlan 13
 ip add 1.0.0.1 255.0.0.0
 no shutdown
+
+router eigrp 100
+network 192.168.72.0 0.0.0.255
+network 1.0.0.0 0.255.255.255
+
+end
+write
+
+------------- Config SW2 -------------
+
+vlan 63
+name CORPORATIVO
+exit
+vlan 13
+name VENTAS
+exit
+vlan 23
+name DISTRIBUCION
+exit
+vlan 999
+name BLACKHOLE
+exit
+vlan 99
+name NATIVA
+exit
+
+interface range FastEthernet0/4 - 24
+switchport mode access
+switchport access vlan 999
+shutdown
+
+interface range FastEthernet0/1 - 2
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 99,63,13,23
+no shutdown
+
+interface FastEthernet0/3
+switchport mode access
+switchport access vlan 63
+no shutdown
+
+interface Port-channel1
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 99,63,13,23
+end
+
+
+write
+
+---------- Config MSW4 ----------
+
+en
+conf t
+host MSW1
+ip routing 
+
+vlan 63
+name CORPORATIVO
+vlan 13
+name VENTAS
+vlan 23
+name DISTRIBUCION
+vlan 999
+name BLACKHOLE
+exit
+
+interface Port-channel1
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 99,63,13,23
+
+
+int range fa0/1-2
+switchport trunk encapsulation dot1q
+switchport mode trunk 
+switchport trunk native vlan 99
+switchport trunk allowed vlan 99,63,13,23
+channel-group 1 mode active
+no shut
+
+interface GigabitEthernet0/1
+description connection to MSW2
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 99,63,13,23
+no shutdown
+
+interface GigabitEthernet0/2
+description connection to MSW7
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed 99,63,13,23
+no shutdown
+
+interface range FastEthernet0/3 - 24
+switchport mode access
+switchport access vlan 999
+shutdown
+
+interface vlan 63
+ip add 192.168.82.1 255.255.255.0
+no shut
+
+interface vlan 12
+ip add 1.0.0.2 255.0.0.0
+no shut
+
+interface vlan 22
+ip add 2.0.0.2 255.0.0.0
+no shut
+exit
+
+router eigrp 100
+redistribute ospf 1 metric 10000 1000 255 1 1500
+network 192.168.82.0 0.0.0.255
+network 1.0.0.0 0.255.255.255
+network 2.0.0.0 0.255.255.255
+
+
+router ospf 1
+redistribute eigrp 100 subnets 
+network 192.168.82.0 0.0.0.255 area 0
+network 2.0.0.0 0.255.255.255 area 0
+end
+
+write
