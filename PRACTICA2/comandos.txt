@@ -1,0 +1,58 @@
+SW1
+
+vlan 63
+name CORPORATIVO
+exit
+vlan 13
+name VENTAS
+exit
+vlan 23
+name DISTRIBUCION
+exit
+
+interface range FastEthernet0/1 - 2
+switchport mode trunk
+switchport trunk allowed vlan 13,63,23
+channel-protocol lacp
+channel-group 2 mode passive
+no shutdown
+
+
+interface range FastEthernet0/3 - 5
+switchport mode access
+switchport access vlan 63
+no shutdown
+-------------------------------------------------------------
+MSW1
+
+vlan 63
+name CORPORATIVO
+exit
+vlan 13
+name VENTAS
+exit
+vlan 23
+name DISTRIBUCION
+exit
+
+interface range FastEthernet0/1 - 2
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport trunk allowed vlan 13,63,23
+channel-protocol lacp
+channel-group 2 mode active
+no shutdown
+
+interface range FastEthernet0/3
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport trunk allowed vlan 13,63,23
+no shutdown
+
+interface vlan 63
+ip add 192.168.73.1 255.255.255.0
+no shutdown
+
+interface vlan 13
+ip add 1.0.0.1 255.0.0.0
+no shutdown
