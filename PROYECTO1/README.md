@@ -20,17 +20,26 @@
 
 ![module](img/module.png)
 
-## Configuración de Ip
-| Dispositivo | Dirección IP    | Máscara de subred |
-|-------------|-----------------|-------------------|
-| MSW1        | 30.0.0.1        | 255.255.255.0     |
-| MSW7        | 30.0.0.6        | 255.255.255.0     |
-| MSW8        | 30.0.0.7        | 255.255.255.0     |
-| MSW9        | 30.0.0.10       | 255.255.255.0     |
-| MSW10       | 30.0.0.11       | 255.255.255.0     |
-| MSW11       | 30.0.0.8        | 255.255.255.0     |
-| MSW12       | 30.0.0.12       | 255.255.255.0     |
-| SW1         | 30.0.0.2        | 255.255.255.0     |
+## Configuración de IP
+
+| Dispositivo   | Dirección IP    | Máscara de subred |
+|---------------|-----------------|-------------------|
+| MSW1          | 30.0.0.1        | 255.255.255.0     |
+| MSW7 (HSRP)   | 30.0.0.13       | 255.255.255.0     |
+| MSW7 (Física) | 30.0.0.6        | 255.255.255.0     |
+| MSW8 (HSRP)   | 30.0.0.13       | 255.255.255.0     |
+| MSW8 (Física) | 30.0.0.7        | 255.255.255.0     |
+| MSW9 (HSRP)   | 30.0.0.14       | 255.255.255.0     |
+| MSW9 (Física) | 30.0.0.10       | 255.255.255.0     |
+| MSW10 (HSRP)  | 30.0.0.14       | 255.255.255.0     |
+| MSW10 (Física)| 30.0.0.11       | 255.255.255.0     |
+| MSW11         | 30.0.0.8        | 255.255.255.0     |
+| MSW12         | 30.0.0.12       | 255.255.255.0     |
+| SW1           | 30.0.0.2        | 255.255.255.0     |
+| DHCP1         | 30.0.1.2        | 255.255.255.0     |
+| DHCP2         | 30.0.1.3        | 255.255.255.0     |
+| WEB           | 30.0.3.2        | 255.255.255.0     |
+
 
 ## Configuración de puertos
 <p align="justify">En esta sección, se llevaron a cabo ajustes en los puertos de cada switch. En términos generales, se configuraron específicamente aquellos que están conectados directamente a dispositivos como PC-PT, Laptop-PT, los 2 servidores DHCP y el servidor Web en modo acceso. Por otro lado, se establecieron los demás puertos en modo trunked para garantizar una comunicación adecuada en toda la topología. A continuación, se presentan algunos ejemplos de las configuraciones realizadas para una mejor comprensión.</p>
@@ -39,13 +48,15 @@
 
 Iniciando esta configuración se tomó como base las VLAN's solicitadas, como se muestra a continuación en la tabla:
 
-| Nombre          | Número |
-|-----------------|--------|
-| ADMINISTRACION  | 10     |
-| IT              | 20     |
-| CONTABILIDAD    | 30     |
-| WEB             | 40     |
-| BLACKHOLE       | 999    |
+| Nombre          | Número | Descripción                                                |
+|-----------------|--------|------------------------------------------------------------|
+| ADMINISTRACION  | 10     | VLAN para el departamento de Administración                |
+| IT              | 20     | VLAN para el departamento de Tecnología de la Información  |
+| CONTABILIDAD    | 30     | VLAN para el departamento de Contabilidad                  |
+| WEB             | 40     | VLAN para servidores web                                   |
+| BLACKHOLE       | 999    | VLAN de descarte de tráfico no deseado                     |
+| HSRP            | -      | Direcciones IP virtuales HSRP en switches                  |
+| Servidores      | -      | Direcciones IP estáticas de los servidores                 |
 
 
 ## LACP (PortChannel)
