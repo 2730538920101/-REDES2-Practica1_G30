@@ -20,6 +20,20 @@
 
 ![module](img/module.png)
 
+<p align="justify">Configuración Server DHCP:</p>
+
+![module](img/dhcp.png)
+
+<p align="justify">Configuración PC DHCP:</p>
+
+![module](img/pc.png)
+
+<p align="justify">Configuración Server WEB con servicio HHTP:</p>
+
+![module](img/http.png)
+
+![module](img/html.png)
+
 ## Configuración de IP
 
 | Dispositivo   | Dirección IP    | Máscara de subred |
@@ -50,7 +64,7 @@ Iniciando esta configuración se tomó como base las VLAN's solicitadas, como se
 
 | Nombre          | Número | Descripción                                                |
 |-----------------|--------|------------------------------------------------------------|
-| ADMINISTRACION  | 10     | VLAN para el departamento de Administración                |
+| ADMINISTRACION  | 10     | VLAN para la administración de la red               |
 | IT              | 20     | VLAN para el departamento de Tecnología de la Información  |
 | CONTABILIDAD    | 30     | VLAN para el departamento de Contabilidad                  |
 | WEB             | 40     | VLAN para servidores web                                   |
