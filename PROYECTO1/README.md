@@ -26,11 +26,17 @@
 
 <p align="justify">Configuración PC DHCP:</p>
 
-![module](img/pc.png)
+![module](img/pc_dhcp.png)
 
-<p align="justify">Configuración Server WEB con servicio HHTP:</p>
+<p align="justify">Configuración Server WEB IP:</p>
+
+![module](img/server_web.png)
+
+<p align="justify">Servicio HTTP :</p>
 
 ![module](img/http.png)
+
+<p align="justify">Contenido HTML :</p>
 
 ![module](img/html.png)
 
