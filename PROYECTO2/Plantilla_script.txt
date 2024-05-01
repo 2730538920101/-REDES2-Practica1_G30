@@ -1,0 +1,519 @@
+Configuración de A-R1 (Akado Router)
+-------------------------------------------------------------------
+
+hostname A-R1
+!
+interface GigabitEthernet0/0
+ description Conexión a A-MSW1
+ ip address 192.168.30.1 255.255.255.248
+!
+interface Serial0/3/0
+ description Conexión a Y-R1
+ ip address 10.0.0.2 255.255.255.252
+!
+interface Serial0/3/1
+ description Conexión a R-R1
+ ip address 10.0.0.5 255.255.255.252
+!
+router eigrp 100
+ network 192.168.30.0 0.0.0.255
+ network 10.0.0.4 0.0.0.3
+ network 10.0.0.0 0.0.0.3
+!
+router bgp 200
+ neighbor 10.0.0.6 remote-as 300
+ neighbor 192.168.30.9 remote-as 200
+ neighbor 192.168.30.9 update-source GigabitEthernet0/0
+!
+
+
+Configuración de Y-R1 (Yota Router)
+----------------------------------------------------------------------
+hostname Y-R1
+!
+interface GigabitEthernet0/0
+ description Conexión a Y-MSW1
+ ip address 192.168.40.1 255.255.255.248
+!
+interface Serial0/3/0
+ description Conexión a A-R1
+ ip address 10.0.0.1 255.255.255.252
+!
+interface Serial0/3/1
+ description Conexión a R-R1
+ ip address 10.0.0.6 255.255.255.252
+!
+router rip
+ version 2
+ network 192.168.40.0
+ network 10.0.0.0
+!
+
+Configuración de R-R1 (Rostelecom Router)
+---------------------------------------------------------------------------
+hostname R-R1
+!
+interface GigabitEthernet0/0
+ description Conexión a R-MSW1
+ ip address 192.168.70.1 255.255.255.248
+!
+interface Serial0/3/0
+ description Conexión a A-R1
+ ip address 10.0.0.5 255.255.255.252
+!
+interface Serial0/3/1
+ description Conexión a Y-R1
+ ip address 10.0.0.6 255.255.255.252
+!
+router ospf 1
+ network 192.168.70.0 0.0.0.255 area 0
+ network 10.0.0.4 0.0.0.3 area 0
+ network 10.0.0.0 0.0.0.3 area 0
+!
+
+Configuración de A-MSW1 (Akado Layer 3 Switch)
+---------------------------------------------------------------------------------
+hostname A-MSW1
+!
+interface GigabitEthernet0/1
+ description Conexión a A-R1
+ no switchport
+ ip address 192.168.30.2 255.255.255.248
+!
+interface FastEthernet0/1
+ description Conexión a A-MSW2 (LACP)
+ channel-group 1 mode active
+!
+interface FastEthernet0/2
+ description Conexión a A-MSW2 (LACP)
+ channel-group 1 mode active
+!
+interface FastEthernet0/3
+ description Conexión a A-MSW3 (LACP)
+ channel-group 2 mode active
+!
+interface FastEthernet0/4
+ description Conexión a A-MSW3 (LACP)
+ channel-group 2 mode active
+!
+
+Configuración de A-MSW2 (Akado Layer 3 Switch)
+--------------------------------------------------------------------------
+hostname A-MSW2
+!
+interface FastEthernet0/1
+ description Conexión a A-MSW1 (LACP)
+ channel-group 1 mode active
+!
+interface FastEthernet0/2
+ description Conexión a A-MSW1 (LACP)
+ channel-group 1 mode active
+!
+interface FastEthernet0/5
+ description Conexión a A-SW1
+ switchport mode access
+ switchport access vlan 10
+!
+
+Configuración de A-MSW3 (Akado Layer 3 Switch)
+----------------------------------------------------------------------------
+hostname A-MSW3
+!
+interface FastEthernet0/3
+ description Conexión a A-MSW1 (LACP)
+ channel-group 2 mode active
+!
+interface FastEthernet0/4
+ description Conexión a A-MSW1 (LACP)
+ channel-group 2 mode active
+!
+interface FastEthernet0/5
+ description Conexión a A-SW2
+ switchport mode access
+ switchport access vlan 10
+!
+
+
+Configuración de A-SW1 (Akado Layer 2 Switch)
+--------------------------------------------------------------------------------
+hostname A-SW1
+!
+interface FastEthernet0/5
+ description Conexión a A-MSW2
+ switchport mode access
+ switchport access vlan 10
+!
+interface FastEthernet0/1
+ description Conexión a PC1
+ switchport mode access
+ switchport access vlan 20
+!
+interface FastEthernet0/2
+ description Conexión a PC2
+ switchport mode access
+ switchport access vlan 20
+!
+interface FastEthernet0/3
+ description Conexión a PC3
+ switchport mode access
+ switchport access vlan 20
+!
+
+Configuración de A-SW2 (Akado Layer 2 Switch)
+----------------------------------------------------------------------------------
+hostname A-SW2
+!
+interface FastEthernet0/5
+ description Conexión a A-MSW3
+ switchport mode access
+ switchport access vlan 10
+!
+interface FastEthernet0/1
+ description Conexión a PC4
+ switchport mode access
+ switchport access vlan 20
+!
+interface FastEthernet0/2
+ description Conexión a PC5
+ switchport mode access
+ switchport access vlan 20
+!
+interface FastEthernet0/3
+ description Conexión a PC6
+ switchport mode access
+ switchport access vlan 20
+!
+
+Configuración de Y-MSW1 (Yota Layer 3 Switch)
+-----------------------------------------------------------------------------------------
+hostname Y-MSW1
+!
+interface GigabitEthernet0/1
+ description Conexión a Y-R1
+ no switchport
+ ip address 192.168.40.2 255.255.255.248
+!
+interface FastEthernet0/1
+ description Conexión a Y-MSW2 (LACP)
+ channel-group 1 mode active
+!
+interface FastEthernet0/2
+ description Conexión a Y-MSW2 (LACP)
+ channel-group 1 mode active
+!
+interface FastEthernet0/5
+ description Conexión a Y-MSW3
+ switchport mode access
+ switchport access vlan 10
+!
+
+
+Configuración de Y-MSW2 (Yota Layer 3 Switch)
+--------------------------------------------------------------------------------------
+hostname Y-MSW2
+!
+interface FastEthernet0/1
+ description Conexión a Y-MSW1 (LACP)
+ channel-group 1 mode active
+!
+interface FastEthernet0/2
+ description Conexión a Y-MSW1 (LACP)
+ channel-group 1 mode active
+!
+interface FastEthernet0/5
+ description Conexión a Y-MSW3
+ switchport mode access
+ switchport access vlan 10
+!
+interface FastEthernet0/6
+ description Conexión a Y-MSW4
+ switchport mode access
+ switchport access vlan 10
+!
+interface FastEthernet0/7
+ description Conexión a Y-MSW5
+ switchport mode access
+ switchport access vlan 10
+!
+
+Configuración de Y-MSW3 (Yota Layer 3 Switch)
+--------------------------------------------------------------------------------------
+hostname Y-MSW3
+!
+interface FastEthernet0/5
+ description Conexión a Y-MSW1
+ switchport mode access
+ switchport access vlan 10
+!
+interface FastEthernet0/6
+ description Conexión a Y-MSW4
+ switchport mode access
+ switchport access vlan 10
+!
+interface FastEthernet0/7
+ description Conexión a Y-MSW5
+ switchport mode access
+ switchport access vlan 10
+!
+
+Configuración de Y-MSW4 (Yota Layer 3 Switch)
+---------------------------------------------------------------------------------------
+hostname Y-MSW4
+!
+interface FastEthernet0/5
+ description Conexión a Y-MSW2
+ switchport mode access
+ switchport access vlan 10
+!
+interface FastEthernet0/6
+ description Conexión a Y-MSW3
+ switchport mode access
+ switchport access vlan 10
+!
+interface FastEthernet0/7
+ description Conexión a Y-MSW5
+ switchport mode access
+ switchport access vlan 10
+!
+
+Configuración de Y-MSW5 (Yota Layer 3 Switch)
+------------------------------------------------------------------------------------------
+hostname Y-MSW5
+!
+interface FastEthernet0/5
+ description Conexión a Y-MSW2
+ switchport mode access
+ switchport access vlan 10
+!
+interface FastEthernet0/6
+ description Conexión a Y-MSW3
+ switchport mode access
+ switchport access vlan 10
+!
+interface FastEthernet0/7
+ description Conexión a Y-MSW4
+ switchport mode access
+ switchport access vlan 10
+!
+
+
+Configuración de Y-SW1 (Yota Layer 2 Switch)
+--------------------------------------------------------------------------------------
+hostname Y-SW1
+!
+interface FastEthernet0/4
+ description Conexión a Y-MSW4
+ switchport mode access
+ switchport access vlan 10
+!
+interface FastEthernet0/1
+ description Conexión a Y-PC1
+ switchport mode access
+ switchport access vlan 20
+!
+interface FastEthernet0/2
+ description Conexión a Y-PC2
+ switchport mode access
+ switchport access vlan 20
+!
+interface FastEthernet0/3
+ description Conexión a Y-PC3
+ switchport mode access
+ switchport access vlan 20
+!
+
+Configuración de Y-SW2 (Yota Layer 2 Switch)
+--------------------------------------------------------------------------------------
+hostname Y-SW2
+!
+interface FastEthernet0/4
+ description Conexión a Y-MSW5
+ switchport mode access
+ switchport access vlan 10
+!
+interface FastEthernet0/1
+ description Conexión a Y-PC4
+ switchport mode access
+ switchport access vlan 20
+!
+interface FastEthernet0/2
+ description Conexión a Y-PC5
+ switchport mode access
+ switchport access vlan 20
+!
+interface FastEthernet0/3
+ description Conexión a Y-PC6
+ switchport mode access
+ switchport access vlan 20
+!
+
+Configuración de R-MSW1 (Rostelecom Layer 3 Switch)
+-----------------------------------------------------------------------------------
+hostname R-MSW1
+!
+interface GigabitEthernet0/0
+ description Conexión a R-R1
+ no switchport
+ ip address 192.168.70.2 255.255.255.248
+!
+interface FastEthernet0/1
+ description Conexión a R-SW1 (LACP)
+ channel-group 1 mode active
+!
+interface FastEthernet0/2
+ description Conexión a R-SW1 (LACP)
+ channel-group 1 mode active
+!
+interface FastEthernet0/3
+ description Conexión a R-SW2 (LACP)
+ channel-group 2 mode active
+!
+interface FastEthernet0/4
+ description Conexión a R-SW2 (LACP)
+ channel-group 2 mode active
+!
+interface FastEthernet0/5
+ description Conexión a R-SW3 (LACP)
+ channel-group 3 mode active
+!
+interface FastEthernet0/6
+ description Conexión a R-SW3 (LACP)
+ channel-group 3 mode active
+!
+interface FastEthernet0/7
+ description Conexión a R-SW4 (LACP)
+ channel-group 4 mode active
+!
+interface FastEthernet0/8
+ description Conexión a R-SW4 (LACP)
+ channel-group 4 mode active
+!
+interface FastEthernet0/9
+ description Conexión a R-SW5 (LACP)
+ channel-group 5 mode active
+!
+interface FastEthernet0/10
+ description Conexión a R-SW5 (LACP)
+ channel-group 5 mode active
+!
+interface FastEthernet0/11
+ description Conexión a R-SW6 (LACP)
+ channel-group 6 mode active
+!
+interface FastEthernet0/12
+ description Conexión a R-SW6 (LACP)
+ channel-group 6 mode active
+!
+
+Configuración de R-SW1 (Rostelecom Layer 2 Switch)
+------------------------------------------------------------------------
+hostname R-SW1
+!
+interface FastEthernet0/1
+ description Conexión a R-MSW1 (LACP)
+ channel-group 1 mode active
+!
+interface FastEthernet0/2
+ description Conexión a R-MSW1 (LACP)
+ channel-group 1 mode active
+!
+interface FastEthernet0/3
+ description Conexión a R-PC1
+ switchport mode access
+ switchport access vlan 20
+!
+
+
+Configuración de R-SW2 (Rostelecom Layer 2 Switch)
+---------------------------------------------------------------------------
+hostname R-SW2
+!
+interface FastEthernet0/3
+ description Conexión a R-MSW1 (LACP)
+ channel-group 1 mode active
+!
+interface FastEthernet0/4
+ description Conexión a R-MSW1 (LACP)
+ channel-group 1 mode active
+!
+interface FastEthernet0/1
+ description Conexión a R-PC2
+ switchport mode access
+ switchport access vlan 20
+!
+
+
+Configuración de R-SW3 (Rostelecom Layer 2 Switch)
+--------------------------------------------------------------------------------
+hostname R-SW3
+!
+interface FastEthernet0/5
+ description Conexión a R-MSW1 (LACP)
+ channel-group 1 mode active
+!
+interface FastEthernet0/6
+ description Conexión a R-MSW1 (LACP)
+ channel-group 1 mode active
+!
+interface FastEthernet0/1
+ description Conexión a R-PC3
+ switchport mode access
+ switchport access vlan 20
+!
+
+
+Configuración de R-SW4 (Rostelecom Layer 2 Switch)
+-----------------------------------------------------------------------------------
+hostname R-SW4
+!
+interface FastEthernet0/7
+ description Conexión a R-MSW1 (LACP)
+ channel-group 1 mode active
+!
+interface FastEthernet0/8
+ description Conexión a R-MSW1 (LACP)
+ channel-group 1 mode active
+!
+interface FastEthernet0/1
+ description Conexión a R-PC4
+ switchport mode access
+ switchport access vlan 20
+!
+
+
+Configuración de R-SW5 (Rostelecom Layer 2 Switch)
+----------------------------------------------------------------------------------------
+hostname R-SW5
+!
+interface FastEthernet0/9
+ description Conexión a R-MSW1 (LACP)
+ channel-group 1 mode active
+!
+interface FastEthernet0/10
+ description Conexión a R-MSW1 (LACP)
+ channel-group 1 mode active
+!
+interface FastEthernet0/1
+ description Conexión a R-PC5
+ switchport mode access
+ switchport access vlan 20
+!
+
+
+Configuración de R-SW6 (Rostelecom Layer 2 Switch)
+-----------------------------------------------------------------------------------------
+hostname R-SW6
+!
+interface FastEthernet0/11
+ description Conexión a R-MSW1 (LACP)
+ channel-group 1 mode active
+!
+interface FastEthernet0/12
+ description Conexión a R-MSW1 (LACP)
+ channel-group 1 mode active
+!
+interface FastEthernet0/1
+ description Conexión a R-PC6
+ switchport mode access
+ switchport access vlan 20
+!
